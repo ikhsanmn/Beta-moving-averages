@@ -9,11 +9,15 @@
 
 #define MAGICMA  20131111
 //--- Inputs
-input double Lots          =0.1;
-input double MaximumRisk   =0.02;
+input double Lots          =0.01;
+input double MaximumRisk   =0.002;
 input double DecreaseFactor=3;
-input int    MovingPeriod  =12;
-input int    MovingShift   =6;
+input int    MovingPeriod2  =12;
+input int    MovingShift2   =6;
+//
+input int MovingPeriod1 =5;
+input int MovingShift1 =0;
+//
 //+------------------------------------------------------------------+
 //| Calculate open positions                                         |
 //+------------------------------------------------------------------+
@@ -64,7 +68,7 @@ double LotsOptimized()
          lot=NormalizeDouble(lot-lot*losses/DecreaseFactor,1);
      }
 //--- return lot size
-   if(lot<0.1) lot=0.1;
+   if(lot<0.01) lot=0.01;
    return(lot);
   }
 //+------------------------------------------------------------------+
@@ -78,6 +82,9 @@ void CheckForOpen()
    if(Volume[0]>1) return;
 //--- get Moving Average 
    ma=iMA(NULL,0,MovingPeriod,MovingShift,MODE_SMA,PRICE_CLOSE,0);
+   //
+   ma2=iMA(NULL,0,MovingPeriod,MovingShift,MODE_SMA,PRICE_CLOSE,0); 
+   //
 //--- sell conditions
    if(Open[1]>ma && Close[1]<ma)
      {
